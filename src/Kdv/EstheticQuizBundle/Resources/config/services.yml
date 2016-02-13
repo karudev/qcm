@@ -1,0 +1,4 @@
+services:
+#    kdv_esthetic_quiz.example:
+#        class: Kdv\EstheticQuizBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]

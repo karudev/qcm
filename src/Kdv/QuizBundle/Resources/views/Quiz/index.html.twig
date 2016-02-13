@@ -1,0 +1,35 @@
+<div align="center">
+{% if question is not null %}
+<h1>{{question.quiz.name}}</h1>
+<div>
+<h2>Catégorie : {{question.category.name}}</h2>
+<h3>Question #{{questionNumber}}</h3>
+<p>{{question.enunciated|raw}}</p>
+{% if question.picturePath is not null %}
+    <p><img src="{{asset(question.picturePath)}}"></p>
+{% endif %}
+</div>
+<div>
+    <form action="{{path('kdv_quiz_quiz_saveanswer')}}" method="post">
+    <input name="question" type="hidden" value="{{question.id}}">
+    <ul>
+        {% for key,a in question.answers %}
+            
+                {% if question.type == 'single_choice' %}
+                   <li> <input required name="answers" value="{{a.id}}" type="radio"> <label>{{a.text|raw}}</label></li>
+                {% elseif question.type == 'multiple_choice'%}
+                    <li><input name="answers[]" value="{{a.id}}" type="checkbox"> <label>{{a.text|raw}}</label></li>
+                {% elseif question.type == 'multiple_text'%}
+                <li><b>{{key+1}}</b> <input autocomplete="off" type="text" name="answers[]" /></li>
+                {% endif %}
+                
+            
+        {% endfor %}
+    </ul>
+    <div align="center"> <button type="submit">Envoyer</button></div>
+    </form>
+</div>
+{% else %}
+    <div>Il n'y a plus de questions à poser.</div>
+{% endif %}
+</div>

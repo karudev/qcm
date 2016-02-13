@@ -1,0 +1,8 @@
+kdv_esthetic_quiz:
+    resource: "@KdvEstheticQuizBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+kdv_quiz:
+    resource: "@KdvQuizBundle/Resources/config/routing.yml"
+    prefix:   /

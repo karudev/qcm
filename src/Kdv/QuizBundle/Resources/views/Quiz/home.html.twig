@@ -1,0 +1,12 @@
+<div align="center">
+<h1>Liste des QCM</h1>
+</div>
+<div>
+   
+    <ul>
+        {% for q in quiz %}
+            <li><a href="{{path('kdv_quiz_quiz_index',{quiz:q.id})}}" >{{q.name}}</a></li>
+        {% endfor %}
+    </ul>
+    
+</div>

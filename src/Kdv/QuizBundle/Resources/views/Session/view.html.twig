@@ -1,0 +1,144 @@
+{% extends "KdvQuizBundle::base.html.twig"%}
+
+{% block body %}
+<div align="center">
+     <div><a href="{{path('kdv_quiz_quiz_home')}}">Retour à la liste des QCM</a></div>
+<h1>Résultat</h1>
+
+
+<div>
+   {% set note = 0 %}
+   {% set maxNote = 0 %}
+   {% set newMultipleQuestion = true %}
+   {% set multipleQuestionAnswerPosition = 0 %}
+   {% for k,sa in session.sessionAnswers %}
+       
+      
+       
+       {% if newMultipleQuestion %}
+       <div>Question: <b>{{sa.question.enunciated}}</b></div>
+       {% if sa.question.picturePath is not null %}
+            <div><img src="{{asset(sa.question.picturePath)}}"></div>
+        {% endif %}
+       {% endif %}
+       <div>
+              
+           {% if sa.question.type == 'multiple_text' %}
+              
+              
+               {% set newMultipleQuestion = false %}
+               {% set reponse = false %}
+               {% set reponseText = null %}
+               {% for kma,a in sa.question.answers %}
+                  
+                   {% if kma == multipleQuestionAnswerPosition and sa.text|lower == a.text|lower  and a.isRightAnswer %}
+                       {% set note = note + a.point %}
+                       {% set reponse = true %}
+                   {% endif %}
+                   {% if kma == multipleQuestionAnswerPosition %}
+                       {% set maxNote = maxNote + a.point %}
+                       {% set reponseText = a.text %}
+                   {% endif %}     
+               {% endfor %}
+               
+                 <font color="{{reponse ? 'green' : 'red'}}"><b>{{multipleQuestionAnswerPosition+1}}</b>. {{sa.text}}</font>
+                {% if reponse == false %}
+                    <br/> <font color="green"><b>{{multipleQuestionAnswerPosition+1}}</b>. {{reponseText}}</font>
+                {% endif %}
+               
+                {% set multipleQuestionAnswerPosition = multipleQuestionAnswerPosition + 1 %}
+               
+                {% if session.sessionAnswers[k+1] is defined and session.sessionAnswers[k+1].question.id != sa.question.id %}
+                  {% set newMultipleQuestion = true %}
+                  {% set multipleQuestionAnswerPosition = 0 %}
+               {% endif %}
+           {% else %}
+              
+               <font color="{{sa.answer.isRightAnswer ? 'green' : 'red'}}">Réponse: {{sa.answer.text|raw}}</font><br/>
+               {% if sa.answer.isRightAnswer == false %}
+                    {% for a in sa.answer.question.answers %}
+                        {% if a.isRightAnswer %}
+                             {% set maxNote = maxNote + a.point %}
+                             <font color="green">Réponse: {{a.text|raw}}</font>
+                        {% endif %}
+                    {% endfor %}
+               {% else %}
+                    {% set maxNote = maxNote + sa.answer.point %}
+               {% endif %}
+           {% endif %}
+           
+       </div>
+       <div><br/></div>
+       {% if sa.answer is not null %}
+       {% set note = note + sa.answer.point %}
+       {% endif %}
+     
+   {% endfor %}
+   
+    <h2>NOTE : {{note}}/{{maxNote}}</h2>
+   {#<div>(En cours de dév pour répartitions des points)</div>
+   <div id="container" style="min-width: 400px; max-width: 600px; height: 400px; margin: 0 auto"></div>
+    #}
+</div>
+  
+</div>
+{% endblock %}
+      
+{% block javascripts %}
+   {# <script>
+    $(function () {
+
+    $('#container').highcharts({
+
+        chart: {
+            polar: true,
+            type: 'line'
+        },
+        credits:{
+            enabled:false
+        },
+
+        title: {
+            text: 'Répartition des points',
+            x: -80
+        },
+
+        pane: {
+            size: '80%'
+        },
+
+        xAxis: {
+            categories: ['Sales', 'Marketing', 'Development', 'Customer Support',
+                    'Information Technology', 'Administration'],
+            tickmarkPlacement: 'on',
+            lineWidth: 0
+        },
+
+        yAxis: {
+            gridLineInterpolation: 'polygon',
+            lineWidth: 0,
+            min: 0
+        },
+
+        tooltip: {
+            shared: true,
+            pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>'
+        },
+
+        legend: {
+            align: 'right',
+            verticalAlign: 'top',
+            y: 70,
+            layout: 'vertical'
+        },
+
+        series: [{
+            name: 'Point',
+            data: [2, 5, 2, 5, 5, 3],
+            pointPlacement: 'on'
+        }]
+
+    });
+});
+</script>#}
+{% endblock %}

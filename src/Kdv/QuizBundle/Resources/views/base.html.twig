@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}QCM{% endblock %}</title>
+    {% block stylesheets %}{% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+</head>
+<body>
+{% block body %}{% endblock %}
+
+<script src="{{asset('bundles/kdvquiz/js/jquery/jquery-1.12.0.js')}}"></script>
+<script src="{{asset('bundles/kdvquiz/js/highcharts/highcharts.js')}}"></script>
+<script src="{{asset('bundles/kdvquiz/js/highcharts/highcharts-more.js')}}"></script>
+<script src="{{asset('bundles/kdvquiz/js/highcharts/modules/exporting.js')}}"></script>
+{% block javascripts %}{% endblock %}
+</body>
+</html>
