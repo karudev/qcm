@@ -1,8 +1,10 @@
 /app/bootstrap.php.cache
 /app/cache/*
+/var/cache/*
 !app/cache/.gitkeep
 /app/config/parameters.yml
 /app/logs/*
+/var/logs/*
 !app/logs/.gitkeep
 /app/phpunit.xml
 /bin/
