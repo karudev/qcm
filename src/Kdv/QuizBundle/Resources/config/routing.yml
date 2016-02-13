@@ -1,14 +1,14 @@
 kdv_quiz_quiz_home:
     path:     /
-    defaults: { _controller: KdvQuizBundle:Quiz:Home }
+    defaults: { _controller: KdvQuizBundle:Quiz:home }
     
 kdv_quiz_quiz_index:
     path:     /quiz/{quiz}
-    defaults: { _controller: KdvQuizBundle:Quiz:Index, quiz:null }
+    defaults: { _controller: KdvQuizBundle:Quiz:index, quiz:null }
     
 kdv_quiz_quiz_saveanswer:
     path:     /save-answer
-    defaults: { _controller: KdvQuizBundle:Quiz:SaveAnswer }
+    defaults: { _controller: KdvQuizBundle:Quiz:saveAnswer }
     
 kdv_quiz_session_view:
     path:     /session/view/{session}
