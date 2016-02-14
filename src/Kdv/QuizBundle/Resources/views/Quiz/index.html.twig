@@ -1,35 +1,46 @@
-<div align="center">
-{% if question is not null %}
-<h1>{{question.quiz.name}}</h1>
-<div>
-<h2>Catégorie : {{question.category.name}}</h2>
-<h3>Question #{{questionNumber}}</h3>
-<p>{{question.enunciated|raw}}</p>
-{% if question.picturePath is not null %}
-    <p><img src="{{asset(question.picturePath)}}"></p>
-{% endif %}
-</div>
-<div>
-    <form action="{{path('kdv_quiz_quiz_saveanswer')}}" method="post">
-    <input name="question" type="hidden" value="{{question.id}}">
-    <ul>
-        {% for key,a in question.answers %}
+{% extends "KdvQuizBundle::base.html.twig" %}
+{% block body %}
+    <div align="center">
+         <form action="{{path('kdv_quiz_quiz_saveanswer')}}" method="post">
+        {% if question is not null %}
+            <h1>{{question.quiz.name}}</h1>
+            <div class="col-md-12">
+                <div class="col-md-7">
+                    <h2>Catégorie : {{question.category.name}}</h2>
+                    <h3>Question #{{questionNumber}}</h3>
+                    <div>{{question.enunciated|raw}}</div>
+                    {% if question.picturePath is not null %}
+                        <div class="col-md-12"><img  style="width:100%" src="{{asset(question.picturePath)}}"></div>
+                        {% endif %}
+                </div>
+                <div class="col-md-5">
+                       <div class="col-md-12 form-group" style="margin-top: 50px;">
+                        <input name="question" type="hidden" value="{{question.id}}">
+                        
+                            {% for key,a in question.answers %}
+
+                                {% if question.type == 'single_choice' %}
+                                    <div><input  required name="answers" value="{{a.id}}" type="radio"> <label>{{a.text|raw}}</label></div>
+                                    {% elseif question.type == 'multiple_choice'%}
+                                    <div><input  name="answers[]" value="{{a.id}}" type="checkbox"> <label>{{a.text|raw}}</label></div>
+                                    {% elseif question.type == 'multiple_text'%}
+                                    <div><b>{{key+1}}</b> <input class="form-control" autocomplete="off" type="text" name="answers[]" /></div>
+                                        {% endif %}
+
+
+                            {% endfor %}
+                       
+                        </div>
+                            <div class="col-md-12">
+             <div align="center"> <button class="btn btn-primary" type="submit">Envoyer</button></div>
+             </div>
+                  
+                </div>
+            {% else %}
+                <div>Il n'y a plus de questions à poser.</div>
+            {% endif %}
+            </div>
             
-                {% if question.type == 'single_choice' %}
-                   <li> <input required name="answers" value="{{a.id}}" type="radio"> <label>{{a.text|raw}}</label></li>
-                {% elseif question.type == 'multiple_choice'%}
-                    <li><input name="answers[]" value="{{a.id}}" type="checkbox"> <label>{{a.text|raw}}</label></li>
-                {% elseif question.type == 'multiple_text'%}
-                <li><b>{{key+1}}</b> <input autocomplete="off" type="text" name="answers[]" /></li>
-                {% endif %}
-                
-            
-        {% endfor %}
-    </ul>
-    <div align="center"> <button type="submit">Envoyer</button></div>
-    </form>
-</div>
-{% else %}
-    <div>Il n'y a plus de questions à poser.</div>
-{% endif %}
-</div>
+          </form>
+    </div>
+{% endblock %}
